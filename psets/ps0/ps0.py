@@ -37,8 +37,15 @@ class BTvertex:
 # ... tree rooted at vertex v to the size of that subtree
 # Runtime: O(n)
 def calculate_sizes(v):
-    # Your code goes here
-    pass 
+    total_size = 1
+    
+    if v.left:
+        total_size += calculate_sizes(v.left)
+    if v.right:
+        total_size += calculate_sizes(v.right)
+
+    v.size = total_size
+    return total_size
 
 
 #
@@ -52,5 +59,23 @@ def calculate_sizes(v):
 # Runtime: O(h) 
 
 def FindDescendantOfSize(t, v):
-    # Your code goes here 
-    pass 
+    current_v = v
+    
+    while True:
+        l_size = 0
+        if current_v.left is not None:
+            l_size = current_v.left.size
+        
+        r_size = 0
+        if current_v.right is not None:
+            r_size = current_v.right.size
+    
+
+        if l_size >= t:
+            current_v = current_v.left
+
+        elif r_size >= t:
+            current_v = current_v.right
+        
+        else:
+            return current_v
