@@ -26,12 +26,12 @@ The purpose of this problem set is to solidify your understanding of the RAM mod
 
 
 \begin{enumerate}
- 
+
     \item (Simulation in practice: RAMs on Python)
     In the Github repository, we have given you a partially written Python implementation of a universal RAM Model simulator.  Your task is to fill in the missing parts of the code to obtain a complete universal RAM simulator.
      Your simulator should take as input a RAM Program $P$ and an input $x$, and simulate the execution of $P$ on $x$, and return whatever output $P$ produces (if it halts).  The RAM Program $P$ is given as a Python list $[v,C_0,C_1,\ldots,C_{\ell-1}]$, where $v$ is the number of variables used by $P$.  For simplicity, we assume that the variables are named $0,\ldots,v-1$ (rather than having names like ``tmpptr'' and ``insertvalue''), but you can introduce constants to give names to the variables.  The $0$\textsuperscript{th} variable will always be $\inputlen$, the $1$\textsuperscript{st} variable $\outputpointer$, and the $2$\textsuperscript{nd} variable $\outputlen$.  A command $C$ is given in the form of a list of the form $[\cmd]$, $[\cmd,i]$, $[\cmd,i,j]$, or $[\cmd,i,j,k]$, where $\cmd$ is the name of the command and $i,j,k$ are the indices of the variables or line numbers used in the command.  For example,  the command $\var_i = M[\var_j]$ would be represented as $(\READ,i,j)$.  See the Github repository for the precise syntax as well as some RAM programs you can use to test your simulator.
-     
-\item (Empirically evaluating simulation runtimes and explaining them theoretically)  
+
+\item (Empirically evaluating simulation runtimes and explaining them theoretically)
 
 Consider the following two RAM programs:
 
@@ -84,19 +84,21 @@ $\result = \result \times \fourteen$\;
 $\temp = \result / \W$\;
 $\temp = \temp \times \W$\;
 $\result = \result - \temp$\;
-$M[\outputpointer]=\result$\; 
+$M[\outputpointer]=\result$\;
 \end{algorithm}
 
 
 \begin{enumerate}
     \item Exactly calculate (without asymptotic notation) the RAM-model running times of the above algorithms as a function of $N$.
-    Which one is faster? \label{itm:RAMtime} 
-    
+    Which one is faster? \label{itm:RAMtime}
+
     \item Using your RAM Simulator, run both RAM programs on inputs $N=0,1,2,\ldots,15$ and graph the actual running times (in clock time, not RAM steps).  (We have provided you with some timing and graphing code in the Github repository.) Which one is faster?  \label{itm:realtime}
-    
-    \item Explain the discrepancies you see between Parts~\ref{itm:RAMtime} and \ref{itm:realtime}.  (Hint: What do we know about the relationship between the RAM and Word-RAM models, and why is it relevant to how efficiently the Python simulation runs?) 
-    
-    \item (optional\footnote{This problem won't make a difference between N, L, R-, and R grades.}) Give a theoretical explanation of the shapes of the runtime curves you see in Part~\ref{itm:realtime}, by providing explicit formulas for the asymptotic runtimes of the two programs (in clock time). You may need to do some research online and/or make guesses about how Python operations are implemented to come up with your estimates.     
+
+    \item Explain the discrepancies you see between Parts~\ref{itm:RAMtime} and \ref{itm:realtime}.  (Hint: What do we know about the relationship between the RAM and Word-RAM models, and why is it relevant to how efficiently the Python simulation runs?)
+
+    \item (optional\footnote{This problem won't make a difference between N, L, R-, and R grades.}) Give a theoretical explanation of the shapes of the runtime curves you see in Part~\ref{itm:realtime}, by providing explicit formulas for the asymptotic runtimes of the two programs (in clock time). You may need to do some research online and/or make guesses about how Python operations are implemented to come up with your estimates.
+
+\end{enumerate}
 
 \item (Simulating Word-RAM by RAM)
 For every Word-RAM program $P$, there is a RAM program $R$ that simulates $P$ in the following sense.  For every $n \in \N$, input array $x$ of length $n$, word-length $w$, and time bound $t$, $R(x,2^w, \max_i x[i],t)$ should do the following:
@@ -106,20 +108,20 @@ For every Word-RAM program $P$, there is a RAM program $R$ that simulates $P$ in
     \item The runtime of $R$ should be $O(t)$ and the largest memory location accessed by $R$ should be at most $n+t$.
     \item All of the values that $R$'s variables and memory cells hold during the computation should have bitlength at most $O(w+\log \max_i x[i] + \log n)$.
 \end{itemize}
-Your proof should use an {\em implementation-level} description, similar to the proof that RAM programs can be simulated by ones with at most $c$ registers in Theorem 6.4 from the Hesterberg-Vadhan textbook. 
+Your proof should use an {\em implementation-level} description, similar to the proof that RAM programs can be simulated by ones with at most $c$ registers in Theorem 6.4 from the Hesterberg-Vadhan textbook.
 
 Recall that Word-RAM programs have a finite but changing memory size $S$; you may want to start your simulation by initializing $S$.  Then think about how each operation of a Word-RAM program $P$ can be simulated in a RAM program $R$, taking care of any differences between their semantics in the Word-RAM model vs. the RAM model. Don't forget MALLOC!
 
 Your proof should use an {\em implementation-level} description, similar to the proof that RAM programs can be simulated by ones with at most $c$ registers in Theorem 6.4 from the Hesterberg-Vadhan textbook. Your answer should include - at least - the following aspects:
 \begin{itemize}
-\item Initialization: How the memory in the RAM program R will be initialized? Be mindful of the additional "default variables" that a Word-RAM program has, in comparison to the RAM program. Recall that Word-RAM programs have a finite but changing memory size $S$; you may want to start your simulation by initializing $S$.  
+\item Initialization: How the memory in the RAM program R will be initialized? Be mindful of the additional "default variables" that a Word-RAM program has, in comparison to the RAM program. Recall that Word-RAM programs have a finite but changing memory size $S$; you may want to start your simulation by initializing $S$.
 \item Operations: For each operation in the Word-RAM program P, how will the corresponding operation in the RAM program R be performed? Keep in mind that the RAM program "may not by default know" of nuances of the arithmetic in Word-RAM.
 \item Memory: How will the read and write into the memory locations take place? Keep in mind that the RAM program "may not by default know" of nuances of memory reads or writes in the Word-RAM.
 \item Output: How will the output of the Word-RAM program P be simulated in R? Again, keep the differences between Word-RAM and RAM program in mind.
 \item Runtime: Justify how your simulation maintains the runtime stated above.
 \item Bitlength: justify how your simulation maintains the bitlength stated above.
 \item Don't forget MALLOC and updates to the GOTO command!
-\end{itemize}  
+\end{itemize}
 
 \item (reflection) In what ways do LLMs impact your learning outcomes for this course? If you use LLMs in learning course material, give some example(s) of how they helped you learn something that lectures/sections etc did not. If you do not use LLMs, discuss reasons for why you do not use them. All opinions are valid.
 
