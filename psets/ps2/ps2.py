@@ -58,10 +58,11 @@ class BinarySearchTree:
             left_size = self.left.size
         if ind == left_size:
             return self
-        if left_size > ind and self.left is not None:
+        if ind < left_size and self.left is not None: # we alr check that self.left is not None in 2nd line of function
             return self.left.select(ind)
-        if left_size < ind and self.right is not None:
-            return self.right.select(ind)
+        if ind > left_size and self.right is not None:
+            rem_ind = ind - left_size - 1
+            return self.right.select(rem_ind)
         return None
 
 
@@ -99,7 +100,10 @@ class BinarySearchTree:
             if self.right is None:
                 self.right = BinarySearchTree(self.debugger)
             self.right.insert(key)
-        self.calculate_sizes()
+        
+        left_size = self.left.size if self.left is not None else 0
+        right_size = self.right.size if self.right is not None else 0
+        self.size = 1 + left_size + right_size
         return self
 
     
