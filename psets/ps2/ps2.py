@@ -131,7 +131,40 @@ class BinarySearchTree:
        11 
     '''
     def rotate(self, direction, child_side):
-        # Your code goes here
+        # get the node to rotate
+        x = self.left if child_side == "L" else self.right
+        
+        if direction == "R": # rotate right
+            y = x.left
+
+            if child_side == "R":
+                self.right = y
+            else:
+                self.left = y
+
+            x.left = y.right
+            y.right = x
+
+        if direction == "L":
+            y = x.right
+
+            if child_side == "R":
+                self.right = y
+            else:
+                self.left = y
+            
+            x.right = y.left
+            y.left = x
+        
+        # update x size
+        left_size = x.left.size if x.left is not None else 0
+        right_size = x.right.size if x.right is not None else 0
+        x.size = 1 + left_size + right_size
+
+        left_size = y.left.size if y.left is not None else 0
+        right_size = y.right.size if y.right is not None else 0
+        y.size = 1 + left_size + right_size
+
         return self
 
     def print_bst(self):
