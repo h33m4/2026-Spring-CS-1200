@@ -80,6 +80,25 @@ divide = [5,
             ['write', output_ptr_id, 3],
         ]
 
+# to-do
+add = [5, 
+            ['assign', output_len_id, 1], 
+            ['assign', output_ptr_id, 0], 
+            ['assign', 3, 3],
+            ['assign', 4, 15],
+            ['+', 3, 3, 4],
+            ['write', output_ptr_id, 3],
+        ]
+
+multiply = [5, 
+            ['assign', output_len_id, 1], 
+            ['assign', output_ptr_id, 0], 
+            ['assign', 3, 3],
+            ['assign', 4, 15],
+            ['*', 3, 3, 4],
+            ['write', output_ptr_id, 3],
+        ]
+
 def test() :
     tests["Example 0: Unit Tests"] = [
         {
@@ -96,7 +115,20 @@ def test() :
             "expected": 0,
             "show_expectation": True
         },
-        # TODO: Add more test cases
+        {
+            "label": "Add",
+            "input": 0,
+            "test": lambda n: simulator.executeProgram(add, [0])[0],
+            "expected": 18,
+            "show_expectation": True
+        },
+        {
+            "label": "Multiply",
+            "input": 0,
+            "test": lambda n: simulator.executeProgram(multiply, [0])[0],
+            "expected": 45,
+            "show_expectation": True
+        },
     ]
     tests["Example 1: Factorial Tests"] = [
         {

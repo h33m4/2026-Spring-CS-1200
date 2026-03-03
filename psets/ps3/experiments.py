@@ -23,41 +23,49 @@ zero_id = 3
 one_id = 4
 counter_id = 5
 result_id = 6
-thirteen_id = 7
+fourteen_id = 7
 temp_id = 8   # Used only in prog2
 W_id = 9       # Used only in prog2
 
 # TODO: Fill in prog1 with the first RAM program provided in the homework.
 prog1 = [8, 
-    ['assign', zero_id, 0],
-    ['assign', one_id, 1], 
-    ['assign', thirteen_id, 13],
-    ['assign', output_len_id, 1], 
-    ['assign', output_ptr_id, 0],
-    # TODO: lines 5-8 from pseudocode
-    ['-', counter_id, counter_id, one_id],
-    ['goto', zero_id, 7],
-    ['*', result_id, result_id, thirteen_id],
-    ['write', output_ptr_id, result_id]
+    ['assign', zero_id, 0],                     # line 0
+    ['assign', one_id, 1],                      # line 1
+    ['assign', fourteen_id, 14],                # line 2
+    ['assign', output_len_id, 1],               # line 3
+    ['assign', output_ptr_id, 0],               # line 4
+    ['assign', result_id, 14],                  # line 5
+    ['read', counter_id, zero_id],              # line 6
+    ['goto', counter_id, 11],                   # line 7
+    ['*', result_id, result_id, result_id],     # line 8
+    ['-', counter_id, counter_id, one_id],      # line 9
+    ['goto', zero_id, 7],                       # line 10
+    ['*', result_id, result_id, fourteen_id],   # line 11
+    ['write', output_ptr_id, result_id],        # line 12
 ]
 
 # TODO: Fill in prog2 with the second RAM program provided in the homework.
 prog2 = [10, 
-    ['assign', zero_id, 0],
-    ['assign', one_id, 1], 
-    ['assign', thirteen_id, 13], 
-    ['assign', output_len_id, 1], 
-    ['assign', output_ptr_id, 0],
-    ['assign', result_id, 13],
-    ['assign', W_id, 2**32],
-    ['read', counter_id, zero_id],
-    ['goto', counter_id, 15],
-    ['*', result_id, result_id, result_id],
+    ['assign', zero_id, 0],                     # line 0
+    ['assign', one_id, 1],                      # line 1
+    ['assign', fourteen_id, 14],                # line 2
+    ['assign', output_len_id, 1],               # line 3
+    ['assign', output_ptr_id, 0],               # line 4
+    ['assign', result_id, 14],                  # line 5
+    ['assign', W_id, 2**32],                    # line 6
+    ['read', counter_id, zero_id],              # line 7
+    ['goto', counter_id, 15],                   # line 8
+    ['*', result_id, result_id, result_id],     # line 9
+    ['/', temp_id, result_id, W_id],            # line 10            
+    ['*', temp_id, temp_id, W_id],              # line 11     
+    ['-', result_id, result_id, temp_id],       # line 12                
+    ['-', counter_id, counter_id, one_id],      # line 13
+    ['goto', zero_id, 8],                       # line 14
+    ['*', result_id, result_id, fourteen_id],   # line 15
     ['/', temp_id, result_id, W_id],
     ['*', temp_id, temp_id, W_id],
     ['-', result_id, result_id, temp_id],
-    ['-', counter_id, counter_id, one_id],
-    # TODO: lines 14-19 from pseudocode
+    ['write', output_ptr_id, result_id],
 ]
 
 
@@ -81,7 +89,9 @@ def run_prog2 (n):
 def graph ():
     input_range = range(0, 15)
     prog1_time = [time_fun(run_prog1, i) for i in input_range]
+    print("Finished running prog 1")
     prog2_time = [time_fun(run_prog2, i) for i in input_range]
+    print("Finished running prog2")
     plt.plot(input_range, prog1_time, label="Program 1")
     plt.plot(input_range, prog2_time, label="Program 2")
     plt.xlabel('Input')
