@@ -84,13 +84,19 @@ class HashTable:
     def search(self, key): 
         idx = self._bucket_index(key)
         head = self.table[idx]
+        
+        if head is None: return None
 
         if self.lazing:
-            if head is None:
-                return None
             return head.value
         else:
-            # TODO: Implement search for opt=False
+            curr = head
+            if curr.key == key: return curr.value
+
+            while curr.next is not None:
+                curr = curr.next
+                if curr.key == key: return curr.value
+
             return None
     
     '''
@@ -104,12 +110,29 @@ class HashTable:
     '''
     def delete(self, key):
         idx = self._bucket_index(key)
-
+        curr = self.table[idx]
+        if curr is None: return False
+        
         if self.lazing:
-            if self.table[idx] is None:
-                return False
+            # this assumes that there is a linked list of at least size 2. doesn't work if head is just one node
             self.table[idx] = self.table[idx].next
             return True
         else:
-            # TODO: Implement delete for opt=False
+            
+            if curr.key == key: 
+                self.table[idx] = self.table[idx].next
+                curr.next = None # is this necessary?
+                return True
+
+            while curr.next is not None:
+                if curr.next.key == key:
+                    to_del = curr.next
+                    if to_del.next is not None:
+                        curr.next = to_del.next
+                        to_del.next = None
+                    else: curr.next = None
+
+                    return True
+                curr = curr.next
+
             return False
